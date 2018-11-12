@@ -21,13 +21,11 @@ def send_email(event, context):
                 name=body.get('name')
             )
             result = deliver_email(
-                {
-                    'recipient': body['email'],
-                    'body_html': email['html'],
-                    'body_text': email['text'],
-                    'subject': email['subject'],
-                    'sender': 'info@hyperbudget.net'
-                }
+                recipient=body['email'],
+                body_html=email['html'],
+                body_text=email['text'],
+                subject=email['subject'],
+                sender='info@hyperbudget.net'
             )
             if result.get('error'):
                 print(f"ERROR: {result['error']}")
