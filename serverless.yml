@@ -1,5 +1,8 @@
 service: hyperbudget-email-service # NOTE: update this with your service name
 
+plugins:
+  - serverless-python-requirements
+
 provider:
   name: aws
   runtime: python3.6
@@ -61,3 +64,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:provider.environment.DYNAMODB_TABLE}
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
