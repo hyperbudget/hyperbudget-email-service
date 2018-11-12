@@ -13,5 +13,6 @@ def send_email(event, context):
     }
 
     print("hello world, event called")
+    print(event)
 
     return response
