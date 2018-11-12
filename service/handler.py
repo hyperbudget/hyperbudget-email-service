@@ -1,4 +1,5 @@
 import json
+from service.email import send_email as deliver_email, get_email
 
 
 def send_email(event, context):
@@ -7,7 +8,29 @@ def send_email(event, context):
 
     for record in event['Records']:
         body = json.loads(record['body'])
-        print(f"Record {body}")
+
+        if 'email' not in body:
+            print("ERROR: email not in body")
+            return {"statusCode": 400}
+        elif 'type' not in body:
+            print("ERROR: type not in body")
+            return {"statusCode": 400}
+        else:
+            email = get_email(
+                email_type='reset_password',
+                name=body.get('name')
+            )
+            result = deliver_email(
+                {
+                    'recipient': body['email'],
+                    'body_html': email['html'],
+                    'body_text': email['text'],
+                    'subject': email['subject'],
+                    'sender': 'info@hyperbudget.net'
+                }
+            )
+            if result.get('error'):
+                print(f"ERROR: {result['error']}")
 
     response = {
         "statusCode": 200,
