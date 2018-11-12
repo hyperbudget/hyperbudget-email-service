@@ -3,9 +3,8 @@ service: hyperbudget-email-service # NOTE: update this with your service name
 provider:
   name: aws
   runtime: python3.6
-  profile: sls
   region: eu-west-2
-  stage: ${opt.stage, 'dev'}
+  stage: ${opt:stage, 'dev'}
   environment:
     DYNAMODB_TABLE: ${self:service}-${self:provider.stage}
     SQS_QUEUE: ${self:service}-${self:provider.stage}
@@ -23,11 +22,11 @@ provider:
       Action:
         - "sqs:SendMessage"
         - "sqs:GetQueueUrl"
-        Resource: "arn:aws:sqs:${opt.region, self:provider.region}:*:${self:provider.environment.SQS_QUEUE}"
+      Resource: "arn:aws:sqs:${opt:region, self:provider.region}:*:${self:provider.environment.SQS_QUEUE}"
     - Effect: Allow
       Action:
         - "sqs:ListQueues"
-        Resource: "arn:aws:sqs:${opt.region, self:provider.region}:*:*"
+      Resource: "arn:aws:sqs:${opt:region, self:provider.region}:*:*"
 
 functions:
   sendEmail:
@@ -37,7 +36,7 @@ functions:
       - sqs:
           arn:
             Fn::GetAtt:
-              - ${self.provider.environment.SQS_QUEUE}
+              - sqsQueue
               - Arn
 
 resources:
@@ -48,15 +47,16 @@ resources:
         QueueName: "${self:provider.environment.SQS_QUEUE}"
     UserEmailDBTable:
       Type: "AWS::DynamoDB::Table"
-      DelitionPolicy: Retain
+      DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
           -
-            AttributeName: "Email"
+            AttributeName: "Id"
             AttributeType: "S"
+        KeySchema:
           -
-            AttributeName: "EmailSentDate"
-            AttributeType: "S"
+            AttributeName: "Id"
+            KeyType: "HASH"
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
