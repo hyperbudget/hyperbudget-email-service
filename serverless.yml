@@ -1,0 +1,63 @@
+service: hyperbudget-email-service # NOTE: update this with your service name
+
+provider:
+  name: aws
+  runtime: python3.6
+  profile: sls
+  region: eu-west-2
+  stage: ${opt.stage, 'dev'}
+  environment:
+    DYNAMODB_TABLE: ${self:service}-${self:provider.stage}
+    SQS_QUEUE: ${self:service}-${self:provider.stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+    - Effect: Allow
+      Action:
+        - "sqs:SendMessage"
+        - "sqs:GetQueueUrl"
+        Resource: "arn:aws:sqs:${opt.region, self:provider.region}:*:${self:provider.environment.SQS_QUEUE}"
+    - Effect: Allow
+      Action:
+        - "sqs:ListQueues"
+        Resource: "arn:aws:sqs:${opt.region, self:provider.region}:*:*"
+
+functions:
+  sendEmail:
+    handler: service.handler.send_email
+
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - ${self.provider.environment.SQS_QUEUE}
+              - Arn
+
+resources:
+  Resources:
+    sqsQueue:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: "${self:provider.environment.SQS_QUEUE}"
+    UserEmailDBTable:
+      Type: "AWS::DynamoDB::Table"
+      DelitionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: "Email"
+            AttributeType: "S"
+          -
+            AttributeName: "EmailSentDate"
+            AttributeType: "S"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
