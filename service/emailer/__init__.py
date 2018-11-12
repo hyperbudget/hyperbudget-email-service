@@ -43,7 +43,7 @@ def send_email(*args, **kwargs):
 def get_email(email_type='reset_password', name=None):
     email_map = {
         'reset_password': {
-            'subject': f"Password reset email{' for ' + str(name) if name else ''}",
+            'subject': f"Password reset email{' for ' + str(name) if name else ''}", # noqa E501
             'html': f"""
                 <p>Dear {name if name else 'User'},</p>
                 <p>
