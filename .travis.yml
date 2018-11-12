@@ -1,11 +1,14 @@
-language: node_js
-node_js:
-- '8.11'
+language: python
+python:
+- "3.6"
+services:
+  - docker
 script:
   - npm install -g serverless
   - npm install serverless-python-requirements
-  - sls deploy
-
+  - pip install pipenv
+  - pipenv install .
+  - sls deploy -v --force --conceal
 branches:
   only:
     - master
