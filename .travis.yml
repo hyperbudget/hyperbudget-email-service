@@ -1,10 +1,13 @@
-language: node_js
-node_js:
-- '8.11'
+language: python
+python:
+- "3.6"
+services:
+  - docker
 script:
   - npm install -g serverless
-  - sls deploy
-
+  - npm install serverless-python-requirements
+  - pip install pipenv
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sls deploy -v --force --conceal; fi'
 branches:
   only:
     - master
