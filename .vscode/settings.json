@@ -2,5 +2,6 @@
   "python.pythonPath": "/home/errietta/.local/share/virtualenvs/hyperbudget-email-service-v9zZW6wk/bin/python",
   "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
-  "python.linting.enabled": true
+  "python.linting.enabled": true,
+  "editor.tabSize": 4
 }
