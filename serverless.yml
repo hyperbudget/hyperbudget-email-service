@@ -30,6 +30,10 @@ provider:
       Action:
         - "sqs:ListQueues"
       Resource: "arn:aws:sqs:${opt:region, self:provider.region}:*:*"
+    - Effect: Allow
+      Action:
+        - "ses:SendEmail"
+      Resource: "arn:aws:ses:eu-west-1:*:*"
 
 functions:
   sendEmail:
