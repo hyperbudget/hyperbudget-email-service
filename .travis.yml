@@ -7,7 +7,7 @@ script:
   - npm install -g serverless
   - npm install serverless-python-requirements
   - pip install pipenv
-  - sls deploy -v --force --conceal
+  - '[[ $TRAVIS_BRANCH == "master" ]] && sls deploy -v --force --conceal'
 branches:
   only:
     - master
