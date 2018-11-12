@@ -2,7 +2,8 @@ language: node_js
 node_js:
 - '8.11'
 script:
-  - npm install -g serverless serverless-python-requirements
+  - npm install -g serverless
+  - npm install serverless-python-requirements
   - sls deploy
 
 branches:
