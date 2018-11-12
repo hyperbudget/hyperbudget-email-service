@@ -1,5 +1,5 @@
 import json
-from service.email import send_email as deliver_email, get_email
+from service.emailer import send_email as deliver_email, get_email
 
 
 def send_email(event, context):
