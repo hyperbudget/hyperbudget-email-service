@@ -15,10 +15,12 @@ def send_email(event, context):
         elif 'type' not in body:
             print("ERROR: type not in body")
             return {"statusCode": 400}
-        else:
+        elif body['type'] == 'reset_password':
             email = get_email(
                 email_type='reset_password',
-                name=body.get('name')
+                name=body.get('name'),
+                token=body['token'],
+                userId=body['userId']
             )
             result = deliver_email(
                 recipient=body['email'],
@@ -29,6 +31,9 @@ def send_email(event, context):
             )
             if result.get('error'):
                 print(f"ERROR: {result['error']}")
+        else:
+            print("ERROR: unknown type")
+            return {"statusCode": 400}
 
     response = {
         "statusCode": 200,
@@ -39,16 +44,3 @@ def send_email(event, context):
     print(event)
 
     return response
-
-
-"""
-{'Records': [{'messageId': '99aa6189-314b-4f47-b233-6a90a118c6ec',
-'receiptHandle': '',
-'body': '{\n"hello": "world"\n}', 'attributes': {'ApproximateReceiveCount':
-'1', 'SentTimestamp': '1542058224358', 'SenderId': '504193536768',
-'ApproximateFirstReceiveTimestamp': '1542058224364'}, 'messageAttributes':
-{}, 'md5OfBody': '1f899303b925051f07ad75090dde35f9', 'eventSource':
-'aws:sqs', 'eventSourceARN':
-'...',
-'awsRegion': 'eu-west-2'}]}
-"""

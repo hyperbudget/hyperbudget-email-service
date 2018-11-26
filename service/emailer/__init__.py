@@ -40,7 +40,7 @@ def send_email(*args, **kwargs):
         }
 
 
-def get_email(email_type='reset_password', name=None):
+def get_email(email_type='reset_password', token, email, name=None):
     email_map = {
         'reset_password': {
             'subject': f"Password reset email{' for ' + str(name) if name else ''}", # noqa E501
@@ -48,14 +48,15 @@ def get_email(email_type='reset_password', name=None):
                 <p>Dear {name if name else 'User'},</p>
                 <p>
                 You have request a password reset for your account.
-                If it was requested by you click here: <a href="https://hyperbudget.net/TO-DO">Reset password</a>.
+                If it was requested by you click here:
+                <a href="https://hyperbudget.net/reset-password/{user_id}/{token}">Reset password</a>.
                 Else, please ignore the email.
                 </p>""", # noqa E501
             'text': f"""
                 Dear {name if name else 'User'},
 
                 You have requested a password reset for your account.
-                If it was requested by yourself, please copy and paste this link: https://hyperbudget.net/TO-DO
+                If it was requested by yourself, please copy and paste this link: https://hyperbudget.net/reset-password/{user_id}/{token}
                 Else, please ignore this email.
                 """ # noqa E501
         }
