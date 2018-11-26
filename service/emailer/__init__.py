@@ -49,14 +49,14 @@ def get_email(token, user_id, email_type='reset_password', name=None):
                 <p>
                 You have request a password reset for your account.
                 If it was requested by you click here:
-                <a href="https://hyperbudget.net/reset-password/{user_id}/{token}">Reset password</a>.
+                <a href="https://www.hyperbudget.net/reset-password/{user_id}/{token}">Reset password</a>.
                 Else, please ignore the email.
                 </p>""", # noqa E501
             'text': f"""
                 Dear {name if name else 'User'},
 
                 You have requested a password reset for your account.
-                If it was requested by yourself, please copy and paste this link: https://hyperbudget.net/reset-password/{user_id}/{token}
+                If it was requested by yourself, please copy and paste this link: https://www.hyperbudget.net/reset-password/{user_id}/{token}
                 Else, please ignore this email.
                 """ # noqa E501
         }
