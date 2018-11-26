@@ -20,7 +20,7 @@ def send_email(event, context):
                 email_type='reset_password',
                 name=body.get('name'),
                 token=body['token'],
-                userId=body['userId']
+                user_id=body['userId']
             )
             result = deliver_email(
                 recipient=body['email'],

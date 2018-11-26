@@ -40,7 +40,7 @@ def send_email(*args, **kwargs):
         }
 
 
-def get_email(token, email, email_type='reset_password', name=None):
+def get_email(token, user_id, email_type='reset_password', name=None):
     email_map = {
         'reset_password': {
             'subject': f"Password reset email{' for ' + str(name) if name else ''}", # noqa E501
