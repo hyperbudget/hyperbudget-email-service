@@ -8,7 +8,7 @@ script:
   - npm install serverless-python-requirements
   - pip install pipenv
   - pip install flake8
-  - 'flake8 && if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sls deploy -v --force --conceal; fi'
+  - 'flake8  --exclude=node_modules && if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sls deploy -v --force --conceal; fi'
 branches:
   only:
     - master
